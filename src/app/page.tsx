@@ -1,10 +1,9 @@
 import Container from "@/components/Container";
 import { Header } from "@/components/Header";
+import { PostCoverImage } from "@/components/PostCoverImage";
 import { PostHeading } from "@/components/PostHeading";
 import PostsLists from "@/components/PostsList";
 import { SpinLoader } from "@/components/SpinLoader";
-import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 
 export default async function HomePage() {
@@ -13,16 +12,18 @@ export default async function HomePage() {
       <Header />
 
       <section className="grid grid-cols-1 gap-8 mb-16 sm:grid-cols-2 group">
-        <Link href="#" className="w-full h-full overflow-hidden rounded-xl">
-          <Image
-            className="group-hover:scale-105 transition w-full h-full object-cover object-center"
-            src="/images/bryen_0.png"
-            alt="Description of image"
-            width={1200}
-            height={720}
-            priority
-          />
-        </Link>
+        <PostCoverImage
+          imageProps={{
+            src: "/images/bryen_5.png",
+            width: 1200,
+            height: 600,
+            alt: "A beautiful landscape",
+            priority: true,
+          }}
+          linkProps={{
+            href: "#",
+          }}
+        />
         <div className="flex flex-col gap-4 sm:justify-center">
           <time
             dateTime="2023-01-01"
@@ -30,7 +31,9 @@ export default async function HomePage() {
           >
             January 1, 2023 10:100
           </time>
-          <PostHeading url="#" as="h1">Featured Post Title</PostHeading>
+          <PostHeading url="#" as="h1">
+            Featured Post Title
+          </PostHeading>
           <p>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
             ab dolorum nobis non aperiam nam, exercitationem accusantium vel
