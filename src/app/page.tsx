@@ -1,5 +1,6 @@
 import Container from "@/components/Container";
 import { Header } from "@/components/Header";
+import { PostHeading } from "@/components/PostHeading";
 import PostsLists from "@/components/PostsList";
 import { SpinLoader } from "@/components/SpinLoader";
 import Image from "next/image";
@@ -29,11 +30,7 @@ export default async function HomePage() {
           >
             January 1, 2023 10:100
           </time>
-          <h1 className="text-2xl/tight font-extrabold sm:text-4xl ">
-            <Link href="#" className="text-3xl font-bold hover:underline">
-              Featured Post Title
-            </Link>
-          </h1>
+          <PostHeading url="#" as="h1">Featured Post Title</PostHeading>
           <p>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
             ab dolorum nobis non aperiam nam, exercitationem accusantium vel
