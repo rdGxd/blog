@@ -11,21 +11,35 @@ export default async function HomePage() {
     <Container>
       <Header />
 
-      <section className="grid grid-cols-1 gap-8 mb-16 sm:grid-cols-2 group" >
+      <section className="grid grid-cols-1 gap-8 mb-16 sm:grid-cols-2 group">
         <Link href="#" className="w-full h-full overflow-hidden rounded-xl">
           <Image
-            className="group-hover:scale-105 transition"
+            className="group-hover:scale-105 transition w-full h-full object-cover object-center"
             src="/images/bryen_0.png"
             alt="Description of image"
             width={1200}
             height={720}
+            priority
           />
         </Link>
-        <div>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit ab
-          dolorum nobis non aperiam nam, exercitationem accusantium vel
-          obcaecati sint sit ipsum molestias! Beatae recusandae harum, aliquid
-          necessitatibus eos enim.
+        <div className="flex flex-col gap-4 sm:justify-center">
+          <time
+            dateTime="2023-01-01"
+            className="text-slate-600 text-sm/tight block"
+          >
+            January 1, 2023 10:100
+          </time>
+          <h1 className="text-2xl/tight font-extrabold sm:text-4xl ">
+            <Link href="#" className="text-3xl font-bold hover:underline">
+              Featured Post Title
+            </Link>
+          </h1>
+          <p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
+            ab dolorum nobis non aperiam nam, exercitationem accusantium vel
+            obcaecati sint sit ipsum molestias! Beatae recusandae harum, aliquid
+            necessitatibus eos enim.
+          </p>
         </div>
       </section>
 
