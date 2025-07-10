@@ -6,7 +6,7 @@ export function PostFeatured() {
   const postLink = `/posts/${slug}`;
 
   return (
-    <div className="flex flex-col gap-4 group">
+    <div className="flex flex-col gap-4 group mb-5">
       <PostCoverImage
         imageProps={{
           src: "/images/bryen_0.png",

@@ -1,3 +1,4 @@
+import { formatDateTime, formatDistanceToNow } from "@/utils/format-datetime";
 import { PostHeading } from "../PostHeading";
 
 type PostContentProps = {
@@ -16,8 +17,7 @@ export function PostContent({
   return (
     <div className="flex flex-col gap-4 sm:justify-center">
       <time dateTime={createdAt} className="text-slate-600 text-sm/tight block">
-        {new Date(createdAt).toLocaleDateString()}{" "}
-        {new Date(createdAt).toLocaleTimeString()}
+        {formatDateTime(createdAt)} - {formatDistanceToNow(createdAt)}
       </time>
       <PostHeading url={slug} as="h2">
         {title}
