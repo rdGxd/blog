@@ -19,7 +19,7 @@ export function PostContent({
         {new Date(createdAt).toLocaleDateString()}{" "}
         {new Date(createdAt).toLocaleTimeString()}
       </time>
-      <PostHeading url={`/posts/${slug}`} as="h2">
+      <PostHeading url={slug} as="h2">
         {title}
       </PostHeading>
       <p>{excerpt}</p>

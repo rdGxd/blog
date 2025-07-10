@@ -4,6 +4,8 @@ import { PostCoverImage } from "../PostCoverImage";
 
 export default async function PostsLists() {
   const posts = await postRepository.findAll();
+  const postLink = (slug: string) => `/posts/${slug}`;
+
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (
@@ -17,14 +19,14 @@ export default async function PostsLists() {
               priority: false,
             }}
             linkProps={{
-              href: `/posts/${post.slug}`,
+              href: postLink(post.slug),
             }}
           />
 
           <PostContent
             title={post.title}
             createdAt={post.createdAt}
-            slug={post.slug}
+            slug={postLink(post.slug)}
             excerpt={post.excerpt}
           />
         </div>
