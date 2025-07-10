@@ -1,11 +1,33 @@
 import { postRepository } from "@/repositories/post";
+import { PostContent } from "../PostContent";
+import { PostCoverImage } from "../PostCoverImage";
 
 export default async function PostsLists() {
   const posts = await postRepository.findAll();
   return (
-    <div>
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (
-        <div key={post.id}>{post.title}</div>
+        <div key={post.id} className="flex flex-col gap-4 group">
+          <PostCoverImage
+            imageProps={{
+              src: post.coverImageUrl,
+              width: 1200,
+              height: 720,
+              alt: post.title,
+              priority: false,
+            }}
+            linkProps={{
+              href: `/posts/${post.slug}`,
+            }}
+          />
+
+          <PostContent
+            title={post.title}
+            createdAt={post.createdAt}
+            slug={post.slug}
+            excerpt={post.excerpt}
+          />
+        </div>
       ))}
     </div>
   );
