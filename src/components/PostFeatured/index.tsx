@@ -1,9 +1,10 @@
+import { findAllPublicPosts } from "@/lib/post/queries";
 import { PostCoverImage } from "../PostCoverImage";
 import { PostSummary } from "../PostSummary";
 
-export function PostFeatured() {
-  const slug = "featured-post";
-  const postLink = `/posts/${slug}`;
+export async function PostFeatured() {
+  const posts = await findAllPublicPosts();
+  const post = posts[0];
 
   return (
     <div className="flex flex-col gap-4 group mb-5">
@@ -16,15 +17,15 @@ export function PostFeatured() {
           priority: true,
         }}
         linkProps={{
-          href: postLink,
+          href: post.slug,
         }}
       />
 
       <PostSummary
-        title="Featured Post Title"
-        createdAt="2023-01-01T10:00:00Z"
-        link={slug}
-        excerpt="1Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        title={post.title}
+        createdAt={post.createdAt}
+        link={post.slug}
+        excerpt={post.excerpt}
         postHeading="h1"
       />
     </div>
