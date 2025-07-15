@@ -1,5 +1,5 @@
-import { PostContent } from "../PostContent";
 import { PostCoverImage } from "../PostCoverImage";
+import { PostSummary } from "../PostSummary";
 
 export function PostFeatured() {
   const slug = "featured-post";
@@ -20,11 +20,12 @@ export function PostFeatured() {
         }}
       />
 
-      <PostContent
+      <PostSummary
         title="Featured Post Title"
         createdAt="2023-01-01T10:00:00Z"
-        slug={slug}
+        link={slug}
         excerpt="1Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        postHeading="h1"
       />
     </div>
   );
