@@ -10,14 +10,14 @@ export async function PostFeatured() {
     <div className='group mb-5 flex flex-col gap-4'>
       <PostCoverImage
         imageProps={{
-          src: '/images/bryen_0.png',
+          src: post.coverImageUrl,
           width: 1200,
           height: 720,
-          alt: 'Featured Post',
+          alt: post.title,
           priority: true,
         }}
         linkProps={{
-          href: post.slug,
+          href: `/post/${post.slug}`,
         }}
       />
 
