@@ -1,9 +1,9 @@
-import { postRepository } from "@/repositories/post";
-import { notFound } from "next/navigation";
-import { cache } from "react";
+import { postRepository } from '@/repositories/post';
+import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
 export const findAllPublicPostsCached = cache(async () =>
-  postRepository.findAllPublic()
+  postRepository.findAllPublic(),
 );
 
 export const findPostsBySlugCached = cache(async (slug: string) => {
@@ -15,5 +15,5 @@ export const findPostsBySlugCached = cache(async (slug: string) => {
 });
 
 export const findPostsByIdCached = cache(async (id: string) =>
-  postRepository.findById(id)
+  postRepository.findById(id),
 );

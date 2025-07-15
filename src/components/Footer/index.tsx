@@ -1,11 +1,11 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="text-center pb-16">
+    <footer className='pb-16 text-center'>
       <p>
         <span>Copyright &copy; {new Date().getFullYear()} - </span>
-        <Link href="/">My Blog</Link>
+        <Link href='/'>My Blog</Link>
       </p>
     </footer>
   );

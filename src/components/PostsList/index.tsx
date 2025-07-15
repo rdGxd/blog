@@ -1,16 +1,16 @@
-import { findAllPublicPostsCached } from "@/lib/post/queries";
-import { PostCoverImage } from "../PostCoverImage";
-import { PostSummary } from "../PostSummary";
+import { findAllPublicPostsCached } from '@/lib/post/queries';
+import { PostCoverImage } from '../PostCoverImage';
+import { PostSummary } from '../PostSummary';
 
 export default async function PostsLists() {
   const posts = await findAllPublicPostsCached();
 
   return (
-    <div className="grid grid-cols-1 mb-16 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => {
+    <div className='mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'>
+      {posts.map(post => {
         const postLink = `/post/${post.slug}`;
         return (
-          <div key={post.id} className="flex flex-col gap-4 group">
+          <div key={post.id} className='group flex flex-col gap-4'>
             <PostCoverImage
               imageProps={{
                 src: post.coverImageUrl,
@@ -29,7 +29,7 @@ export default async function PostsLists() {
               createdAt={post.createdAt}
               link={postLink}
               excerpt={post.excerpt}
-              postHeading="h2"
+              postHeading='h2'
             />
           </div>
         );

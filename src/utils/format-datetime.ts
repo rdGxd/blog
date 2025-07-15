@@ -1,8 +1,8 @@
 import {
   formatDistanceToNow as dateFnsFormatDistanceToNow,
   format,
-} from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 export function formatDateTime(rawDate: string): string {
   const date = new Date(rawDate);
