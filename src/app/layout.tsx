@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -22,9 +23,7 @@ export default function RootLayout({
         <Container>
           <Header />
           {children}
-          <footer className="text-center py-4">
-            <p className="text-gray-500">© 2023 My Blog</p>
-          </footer>
+          <Footer />
         </Container>
       </body>
     </html>
