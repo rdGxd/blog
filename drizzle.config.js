@@ -7,5 +7,4 @@ export default defineConfig({
   dbCredentials: {
     url: './db.sqlite3',
   },
-  // driver: 'better-sqlite3',
 });
