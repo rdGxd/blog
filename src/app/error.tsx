@@ -8,7 +8,7 @@ type RootErrorPageProps = {
   reset: () => void;
 };
 
-export default function RootErrorPage({ error, reset }: RootErrorPageProps) {
+export default function RootErrorPage({ error }: RootErrorPageProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);

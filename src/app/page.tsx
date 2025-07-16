@@ -8,7 +8,6 @@ export default async function HomePage() {
     <>
       <Suspense fallback={<SpinLoader className='mb-16 min-h-20' />}>
         <PostFeatured />
-
         <PostsLists />
       </Suspense>
     </>
