@@ -14,6 +14,7 @@ export function PostCoverImage({ imageProps, linkProps }: PostCoverImageProps) {
     >
       <Image
         {...imageProps}
+        alt={imageProps.alt}
         className={`h-full w-full object-cover object-center transition group-hover:scale-105 ${imageProps.className}`}
       />
     </Link>
