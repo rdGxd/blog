@@ -13,7 +13,7 @@ export const findAllPublicPostsCached = unstable_cache(
   },
 );
 
-export const findPostsBySlugCached = (slug: string) =>
+export const findPublicPostsBySlugCached = (slug: string) =>
   unstable_cache(
     cache(async (slug: string) => {
       const post = await postRepository
@@ -30,6 +30,3 @@ export const findPostsBySlugCached = (slug: string) =>
     },
   )(slug);
 
-export const findPostsByIdCached = cache(async (id: string) =>
-  postRepository.findById(id),
-);
