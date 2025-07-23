@@ -4,10 +4,10 @@ type ButtonSizes = 'sm' | 'md' | 'lg';
 
 type ButtonProps = {
   variant: ButtonVariants;
-  size: ButtonSizes;
+  size?: ButtonSizes;
 } & React.ComponentProps<'button'>;
 
-export function Button({ variant, size, ...props }: ButtonProps) {
+export function Button({ variant, size = 'md', ...props }: ButtonProps) {
   const buttonVariants: Record<ButtonVariants, string> = {
     default: 'bg-blue-600 text-blue-100 hover:bg-blue-700',
     ghost: 'bg-slate-300 text-blue-900 hover:bg-slate-400',
