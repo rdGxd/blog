@@ -25,6 +25,8 @@ export const PostListAdmin = async () => {
           </div>
         );
       })}
+
+
     </div>
   );
 };
