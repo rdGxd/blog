@@ -4,6 +4,7 @@ import { deletePostAction } from '@/actions/post/delete-post-action';
 import { Dialog } from '@/components/Dialog';
 import { Trash2Icon } from 'lucide-react';
 import { useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 
 type DeletePostButtonProps = {
   title: string;
@@ -19,14 +20,16 @@ export function DeletePostButtonAdmin({ title, id }: DeletePostButtonProps) {
   }
 
   function handleConfirm() {
+    toast.dismiss();
     startTransition(async () => {
       const result = await deletePostAction(id);
 
       if (result.error) {
-        alert(`Erro ao excluir post: ${result.error}`);
-      } else {
-        alert(`Post "${title}" excluído com sucesso.`);
+        toast.error(`Erro ao excluir o post "${title}": ${result.error}`);
+        return;
       }
+
+      toast.success(`Post "${title}" excluído com sucesso.`);
 
       setShowDialog(false);
     });
