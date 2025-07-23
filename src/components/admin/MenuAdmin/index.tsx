@@ -1,14 +1,51 @@
-import { FileTextIcon, HouseIcon } from 'lucide-react';
+'use client';
+
+import {
+  CircleXIcon,
+  FileTextIcon,
+  HouseIcon,
+  MenuIcon,
+  PlusIcon,
+} from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function MenuAdmin() {
-  const navClasses =
-    'bg-slate-900 text-slate-100 rounded-lg flex flex-col overflow-hidden mb-8 sm:flex-row sm:flex-wrap';
-  const linkClasses =
-    '[&>svg]:w-[16px] [&>svg]:h-[16px] flex items-center gap-2 px-4 hover:bg-slate-800 flex transition hover:bg-slate-800 justify-start h-10 shrink-0 rounded-lg';
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  const navClasses = `bg-slate-900 text-slate-100 rounded-lg flex flex-col  mb-8 sm:flex-row sm:flex-wrap ${!isOpen && 'h-10'}
+  ${!isOpen && 'overflow-hidden'}
+  sm:overflow-visible sm:h-auto
+  `;
+  const linkClasses = `[&>svg]:w-[16px] [&>svg]:h-[16px] flex items-center gap-2 px-4 hover:bg-slate-800 flex transition hover:bg-slate-800 justify-start h-10 shrink-0 rounded-lg cursor-pointer`;
+
+  const openCloseBtnClasses = `${linkClasses} text-blue-200 italic sm:hidden`;
 
   return (
     <nav className={navClasses}>
+      <button
+        onClick={() => setIsOpen(s => !s)}
+        className={openCloseBtnClasses}
+      >
+        {!isOpen && (
+          <>
+            <MenuIcon />
+            Menu
+          </>
+        )}
+        {isOpen && (
+          <>
+            <CircleXIcon />
+            Fechar
+          </>
+        )}
+      </button>
       <a href='/' target='_blank' className={linkClasses}>
         <HouseIcon />
         Home
@@ -17,29 +54,9 @@ export function MenuAdmin() {
         <FileTextIcon />
         Posts
       </Link>
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
-      </Link>
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
-      </Link>
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
-      </Link>{' '}
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
-      </Link>
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
-      </Link>
-      <Link href='/admin/post' className={linkClasses}>
-        <FileTextIcon />
-        Posts
+      <Link href='/admin/post/new' className={linkClasses}>
+        <PlusIcon />
+        Criar post
       </Link>
     </nav>
   );
