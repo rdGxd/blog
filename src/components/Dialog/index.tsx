@@ -1,3 +1,5 @@
+import { Button } from '../Button';
+
 type DialogProps = {
   isVisible: boolean;
   title: string;
@@ -40,21 +42,23 @@ export function Dialog({
         </h3>
         <div id='dialog-description'>{content}</div>
         <div className='flex items-center justify-around'>
-          <button
+          <Button
+            size='md'
             autoFocus
-            className='cursor-pointer items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-400'
             onClick={handleCancel}
             disabled={disabled}
+            variant='ghost'
           >
             Cancelar
-          </button>
-          <button
-            className='cursor-pointer items-center justify-center rounded-md border border-red-500 bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400'
+          </Button>
+          <Button
+            size='md'
             onClick={onConfirm}
             disabled={disabled}
+            variant='default'
           >
             Ok
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -7,28 +7,24 @@ type ButtonProps = {
   size: ButtonSizes;
 } & React.ComponentProps<'button'>;
 
-export function Button({
-  variant = 'default',
-  size = 'md',
-  ...props
-}: ButtonProps) {
-  const variantClasses: Record<ButtonVariants, string> = {
+export function Button({ variant, size, ...props }: ButtonProps) {
+  const buttonVariants: Record<ButtonVariants, string> = {
     default: 'bg-blue-600 text-blue-100 hover:bg-blue-700',
-    ghost: 'bg-slate-200 text-blue-900 hover:bg-slate-500',
-    danger: 'bg-red-500 text-white hover:bg-red-600',
+    ghost: 'bg-slate-300 text-blue-900 hover:bg-slate-400',
+    danger: 'bg-red-500 text-white hover:bg-red-700',
   };
 
-  const sizeClasses: Record<ButtonSizes, string> = {
-    sm: 'text-xs py-1 px-2',
-    md: 'text-sm py-2 px-4',
-    lg: 'text-lg py-3 px-6',
+  const buttonSizes: Record<ButtonSizes, string> = {
+    sm: 'text-xs/tight py-1 px-2 rounded-sm [&_svg]:w-3 [&_svg]:h-3 gap-1',
+    md: 'text-base/tight py-2 px-4 rounded-md [&_svg]:w-4 [&_svg]:h-4 gap-2',
+    lg: 'text-lg/tight py-4 px-6 rounded-lg [&_svg]:w-5 [&_svg]:h-5 gap-3',
   };
 
-  const buttonClasses = `${variantClasses[variant]} ${sizeClasses[size]} `;
+  const buttonClasses = `${buttonVariants[variant]} ${buttonSizes[size]} flex items-center justify-center cursor-pointer transition disabled:cursor-not-allowed  disabled:bg-slate-200  disabled:text-slate-400 disabled:opacity-50 ${props.className}`;
 
   return (
     <>
-      <button {...props} className={`${buttonClasses} rounded-md`} />
+      <button {...props} className={`${buttonClasses}`} />
     </>
   );
 }
