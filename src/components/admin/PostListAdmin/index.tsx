@@ -1,9 +1,19 @@
+import ErrorMessage from '@/components/ErrorMessage';
 import { findAllPostsAdmin } from '@/lib/post/queries/admin';
 import Link from 'next/link';
 import { DeletePostButtonAdmin } from '../DeletePostButton';
 
 export const PostListAdmin = async () => {
   const posts = await findAllPostsAdmin();
+
+  if (posts.length <= 0) {
+    return (
+      <ErrorMessage
+        contentTitle='Ei admin, cadê os posts? 😅'
+        content='Parece que você ainda não tem posts publicados. Crie um novo post para começar! 😉'
+      />
+    );
+  }
 
   return (
     <div className='mb-16'>
@@ -25,8 +35,6 @@ export const PostListAdmin = async () => {
           </div>
         );
       })}
-
-
     </div>
   );
 };

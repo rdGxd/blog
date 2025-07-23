@@ -5,6 +5,8 @@ import { PostSummary } from '../PostSummary';
 export default async function PostsLists() {
   const posts = await findAllPublicPostsCached();
 
+  if (posts.length <= 0) return null;
+
   return (
     <div className='mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'>
       {posts.slice(1).map(post => {

@@ -21,7 +21,13 @@ export function DeletePostButtonAdmin({ title, id }: DeletePostButtonProps) {
   function handleConfirm() {
     startTransition(async () => {
       const result = await deletePostAction(id);
-      alert(`Post "${result}" deleted successfully.`);
+
+      if (result.error) {
+        alert(`Erro ao excluir post: ${result.error}`);
+      } else {
+        alert(`Post "${title}" excluído com sucesso.`);
+      }
+
       setShowDialog(false);
     });
   }
