@@ -8,22 +8,72 @@ import { useState } from 'react';
 import { ImageUploader } from '../ImageUploader';
 
 export function ManagePostForm() {
-  const [content, setContent] = useState('');
+  const [contentValue, setContentValue] = useState<string>('');
 
   return (
     <form action='' className='mb-16'>
       <div className='flex flex-col gap-6'>
-        <InputText placeholder='Digite seu nome' labelText='Nome' />
-        <InputText placeholder='Digite seu email' labelText='Email' />
-        <ImageUploader />
+        <InputText
+          placeholder='ID gerado automaticamente'
+          labelText='ID'
+          name='id'
+          type='text'
+          defaultValue={''}
+          readOnly
+        />
+
+        <InputText
+          placeholder='SLUG gerado automaticamente'
+          labelText='SLUG'
+          name='slug'
+          type='text'
+          defaultValue={''}
+          readOnly
+        />
+
+        <InputText
+          labelText='Autor'
+          name='author'
+          placeholder='Digite o nome do autor'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputText
+          placeholder='Digite o título do post'
+          labelText='Título'
+          name='title'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputText
+          placeholder='Digite o resumo do post'
+          labelText='Excerto'
+          name='excerpt'
+          type='text'
+          defaultValue={''}
+        />
+
         <MarkdownEditor
           labelText='Conteúdo'
-          value={content}
-          disabled={false}
-          setValue={setContent}
           textAreaName='content'
+          value={contentValue}
+          setValue={setContentValue}
+          disabled={false}
         />
-        <InputCheckbox labelText='Aceito os termos' />
+
+        <ImageUploader />
+
+        <InputText
+          placeholder='Digite a URL da imagem de capa'
+          labelText='URL da imagem de capa '
+          name='coverImageUrl'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputCheckbox type='checkbox' name='published' labelText='Publicar?' />
       </div>
       <div className='mt-6'>
         <Button variant={'default'} size='lg' className='w-full' type='submit'>
