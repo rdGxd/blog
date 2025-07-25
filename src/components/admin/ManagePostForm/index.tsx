@@ -1,6 +1,7 @@
 'use client';
 
 import { createPostAction } from '@/actions/post/create-post-action';
+import { updatePostAction } from '@/actions/post/update-post-action';
 import { Button } from '@/components/Button';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
@@ -10,20 +11,38 @@ import { useActionState, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ImageUploader } from '../ImageUploader';
 
-type ManagePostFormProps = {
-  publicPost?: PublicPost;
+type ManagePostFormUpdateProps = {
+  publicPost: PublicPost;
+  mode: 'update';
 };
 
-export function ManagePostForm({ publicPost }: ManagePostFormProps) {
+type ManagePostFormCreateProps = {
+  publicPost?: PublicPost;
+  mode: 'create';
+};
+type ManagePostFormProps =
+  | ManagePostFormUpdateProps
+  | ManagePostFormCreateProps;
+
+export function ManagePostForm(props: ManagePostFormProps) {
+  const { mode } = props;
+  let publicPost;
+
+  if (mode === 'update') {
+    publicPost = props.publicPost;
+  }
+
+  const actionsMap = {
+    create: createPostAction,
+    update: updatePostAction,
+  }[mode];
+
   const initialState = {
     formState: makePartialPublicPost(publicPost),
     errors: [],
   };
 
-  const [state, action, isPending] = useActionState(
-    createPostAction,
-    initialState,
-  );
+  const [state, action, isPending] = useActionState(actionsMap, initialState);
 
   useEffect(() => {
     if (state.errors.length > 0) {
@@ -33,6 +52,13 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
       });
     }
   }, [state.errors]);
+
+  useEffect(() => {
+    if (state.success) {
+      toast.dismiss();
+      toast.success('Post atualizado com sucesso!');
+    }
+  }, [state.success]);
 
   const { formState } = state;
   const [contentValue, setContentValue] = useState(formState.content || '');
@@ -95,7 +121,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           disabled={isPending}
         />
 
-        <ImageUploader />
+        <ImageUploader disabled={isPending} />
 
         <InputText
           placeholder='Digite a URL da imagem de capa'

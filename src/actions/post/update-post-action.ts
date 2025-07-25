@@ -1,38 +1,77 @@
 'use server';
 
+import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
+import { PostUpdateSchema } from '@/lib/post/validations';
 import { postRepository } from '@/repositories/post';
-import { logColor } from '@/utils/log-color';
+import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
 import { revalidateTag } from 'next/cache';
 
-export async function updatePostAction(id: string) {
-  // TODO: checar login do usuário
+type UpdatePostActionState = {
+  formState: PublicPost;
+  errors: string[];
+  success?: true;
+};
 
-  logColor(`Updating post with ID: ${id}`, 'red');
-  if (!id || typeof id !== 'string') {
+export async function updatePostAction(
+  prevState: UpdatePostActionState,
+  formData: FormData,
+): Promise<UpdatePostActionState> {
+  // TODO: verificar se o usuário está autenticado
+
+  if (!(formData instanceof FormData)) {
     return {
-      error: 'Dados inválidos. ID do post não fornecido ou inválido.',
+      formState: prevState.formState,
+      errors: ['Dados inválidos'],
     };
   }
+
+  const id = formData.get('id')?.toString() || '';
+
+  if (!id || typeof id !== 'string') {
+    return {
+      formState: prevState.formState,
+      errors: ['ID inválido'],
+    };
+  }
+
+  const formDataToObj = Object.fromEntries(formData.entries());
+  const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
+
+  if (!zodParsedObj.success) {
+    const errors = getZodErrorMessages(zodParsedObj.error);
+    return {
+      errors: errors,
+      formState: makePartialPublicPost(formDataToObj),
+    };
+  }
+
+  const validPostData = zodParsedObj.data;
+  const newPost = {
+    ...validPostData,
+  };
 
   let post;
   try {
-    post = await postRepository.findById(id);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
+    post = await postRepository.update(id, newPost);
+  } catch (e: unknown) {
+    if (e instanceof Error) {
       return {
-        error: error.message,
+        errors: [e.message],
+        formState: makePartialPublicPost(formDataToObj),
       };
     }
     return {
-      error: 'Erro ao deletar o post.',
+      errors: ['Erro ao criar o post'],
+      formState: makePartialPublicPost(formDataToObj),
     };
   }
 
-  // TODO: revalidateTag ou revalidatePath
   revalidateTag('posts');
   revalidateTag(`post-${post.slug}`);
 
   return {
-    error: '',
+    formState: makePartialPublicPost(post),
+    errors: [],
+    success: true,
   };
 }
