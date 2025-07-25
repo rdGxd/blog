@@ -3,7 +3,6 @@
 import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
 import { PostUpdateSchema } from '@/lib/post/validations';
 import { postRepository } from '@/repositories/post';
-import { asyncDelay } from '@/utils/async-delay';
 import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
 import { makeRandomString } from '@/utils/make-random-string';
 import { revalidateTag } from 'next/cache';
@@ -19,8 +18,6 @@ export async function updatePostAction(
   formData: FormData,
 ): Promise<UpdatePostActionState> {
   // TODO: verificar se o usuário está autenticado
-
-  await asyncDelay(3000);
 
   if (!(formData instanceof FormData)) {
     return {

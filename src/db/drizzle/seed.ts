@@ -12,6 +12,4 @@ import { postsTable } from './schemas';
   } catch (error) {
     console.error('Error seeding posts:', error);
   }
-
-  console.log(`Posts seeded successfully: ${posts.length} posts`);
 })();

@@ -5,7 +5,6 @@ import {
   IMAGE_UPLOAD_DIRECTORY,
   IMAGE_UPLOAD_MAX_SIZE,
 } from '@/lib/constants';
-import { asyncDelay } from '@/utils/async-delay';
 import { mkdir, writeFile } from 'fs/promises';
 import { extname, resolve } from 'path';
 
@@ -18,10 +17,6 @@ export async function uploadImageAction(
   formData: FormData,
 ): Promise<UploadImageActionResult> {
   // TODO: Verificar login de usuário
-
-
-  // TODO: Remover depois
-  asyncDelay(50000, true)
 
   const makeResult = ({ url = '', error = '' }) => ({ url, error });
 
@@ -66,8 +61,6 @@ export async function uploadImageAction(
   await writeFile(fileFullPath, buffer);
 
   const url = `${IMAGE_SERVER_URL}/${uniqueImageName}`;
-
-  console.log(`Imagem enviada: ${url}`);
 
   // TODO: Aqui você deve implementar a lógica para enviar o arquivo para o servidor
   return makeResult({ url });
