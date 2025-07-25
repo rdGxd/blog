@@ -4,10 +4,10 @@ import { postRepository } from '@/repositories/post';
 import { logColor } from '@/utils/log-color';
 import { revalidateTag } from 'next/cache';
 
-export async function deletePostAction(id: string) {
+export async function updatePostAction(id: string) {
   // TODO: checar login do usuário
 
-  logColor(`Deleting post with ID: ${id}`, 'red');
+  logColor(`Updating post with ID: ${id}`, 'red');
   if (!id || typeof id !== 'string') {
     return {
       error: 'Dados inválidos. ID do post não fornecido ou inválido.',
