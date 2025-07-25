@@ -45,7 +45,7 @@ export function ImageUploader() {
         return;
       }
       // TODO: Aqui você pode fazer algo com a URL retornada, como armazená-la no estado do componente pai ou enviar para o servidor.
-      toast.success('Imagem enviada com sucesso!');
+      toast.success(`Imagem enviada com sucesso: ${result.url}`);
     });
 
     fileInputRef.current.value = '';
