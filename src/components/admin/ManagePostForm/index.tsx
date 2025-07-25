@@ -6,8 +6,8 @@ import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkdownEditor';
 import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
-import Image from 'next/image';
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { ImageUploader } from '../ImageUploader';
 
 type ManagePostFormProps = {
@@ -25,8 +25,17 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
     initialState,
   );
 
+  useEffect(() => {
+    if (state.errors.length > 0) {
+      toast.dismiss();
+      state.errors.forEach(error => {
+        toast.error(error);
+      });
+    }
+  }, [state.errors]);
+
   const { formState } = state;
-  const [contentValue, setContentValue] = useState(formState.content);
+  const [contentValue, setContentValue] = useState(formState.content || '');
 
   return (
     <form action={action} className='mb-16'>
@@ -37,6 +46,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           name='id'
           type='text'
           defaultValue={formState.id}
+          disabled={isPending}
           readOnly
         />
 
@@ -46,6 +56,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           name='slug'
           type='text'
           defaultValue={formState.slug}
+          disabled={isPending}
           readOnly
         />
 
@@ -54,6 +65,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           name='author'
           placeholder='Digite o nome do autor'
           type='text'
+          disabled={isPending}
           defaultValue={formState.author}
         />
 
@@ -61,6 +73,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           placeholder='Digite o título do post'
           labelText='Título'
           name='title'
+          disabled={isPending}
           type='text'
           defaultValue={formState.title}
         />
@@ -69,6 +82,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           placeholder='Digite o resumo do post'
           labelText='Excerto'
           name='excerpt'
+          disabled={isPending}
           type='text'
           defaultValue={formState.excerpt}
         />
@@ -78,7 +92,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           textAreaName='content'
           value={contentValue}
           setValue={setContentValue}
-          disabled={false}
+          disabled={isPending}
         />
 
         <ImageUploader />
@@ -88,17 +102,12 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           labelText='URL da imagem de capa '
           name='coverImageUrl'
           type='text'
+          disabled={isPending}
           defaultValue={formState.coverImageUrl}
         />
 
-        <Image
-          src={formState.coverImageUrl}
-          alt={formState.title}
-          width={1200}
-          height={700}
-        />
-
         <InputCheckbox
+          disabled={isPending}
           type='checkbox'
           name='published'
           labelText='Publicar?'
@@ -106,7 +115,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
         />
       </div>
       <div className='mt-6'>
-        <Button variant={'default'} size='lg' className='w-full' type='submit'>
+        <Button variant={'default'} type='submit' disabled={isPending}>
           Enviar
         </Button>
       </div>
