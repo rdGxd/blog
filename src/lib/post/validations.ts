@@ -7,7 +7,7 @@ const PostBaseSchema = z.object({
     .string()
     .trim()
     .min(3, 'Título deve ter, no mínimo, 3 caractere')
-    .max(10, 'Título deve ter, no máximo, 10 caracteres'),
+    .max(100, 'Título deve ter, no máximo, 100 caracteres'),
   content: z
     .string()
     .trim()
