@@ -1,4 +1,15 @@
+import { ManagePostForm } from '@/components/admin/ManagePostForm';
+import { makePublicPostDto } from '@/dto/post/dto';
+import { findPostsByIdAdmin } from '@/lib/post/queries/admin';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Editar um post',
+  description: 'Página para editar um post existente',
+};
 
 type AdminPostIdPageProps = {
   params: Promise<{ id: string }>;
@@ -8,10 +19,16 @@ export default async function AdminPostIdPage({
   params,
 }: AdminPostIdPageProps) {
   const { id } = await params;
+  const post = await findPostsByIdAdmin(id).catch(() => null);
+
+  if (!post) notFound();
+
+  const publicPost = makePublicPostDto(post);
+
   return (
-    <div>
-      <h1>Post Details {id}</h1>
-      {/* Fetch and display post details here */}
+    <div className='flex flex-col gap-6'>
+      <h1 className='text-xl font-extrabold'>Editar post {id}</h1>
+      <ManagePostForm publicPost={publicPost} />
     </div>
   );
 }

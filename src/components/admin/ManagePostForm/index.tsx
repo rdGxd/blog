@@ -4,11 +4,19 @@ import { Button } from '@/components/Button';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkdownEditor';
+import { PublicPost } from '@/dto/post/dto';
+import Image from 'next/image';
 import { useState } from 'react';
 import { ImageUploader } from '../ImageUploader';
 
-export function ManagePostForm() {
-  const [contentValue, setContentValue] = useState<string>('');
+type ManagePostFormProps = {
+  publicPost?: PublicPost;
+};
+
+export function ManagePostForm({ publicPost }: ManagePostFormProps) {
+  const [contentValue, setContentValue] = useState<string>(
+    publicPost?.content || '',
+  );
 
   return (
     <form action='' className='mb-16'>
@@ -18,7 +26,7 @@ export function ManagePostForm() {
           labelText='ID'
           name='id'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.id || ''}
           readOnly
         />
 
@@ -27,7 +35,7 @@ export function ManagePostForm() {
           labelText='SLUG'
           name='slug'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.slug || ''}
           readOnly
         />
 
@@ -36,7 +44,7 @@ export function ManagePostForm() {
           name='author'
           placeholder='Digite o nome do autor'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.author || ''}
         />
 
         <InputText
@@ -44,7 +52,7 @@ export function ManagePostForm() {
           labelText='Título'
           name='title'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.title || ''}
         />
 
         <InputText
@@ -52,7 +60,7 @@ export function ManagePostForm() {
           labelText='Excerto'
           name='excerpt'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.excerpt || ''}
         />
 
         <MarkdownEditor
@@ -70,10 +78,22 @@ export function ManagePostForm() {
           labelText='URL da imagem de capa '
           name='coverImageUrl'
           type='text'
-          defaultValue={''}
+          defaultValue={publicPost?.coverImageUrl || ''}
         />
 
-        <InputCheckbox type='checkbox' name='published' labelText='Publicar?' />
+        <Image
+          src={publicPost?.coverImageUrl || ''}
+          alt={publicPost?.title || ''}
+          width={1200}
+          height={700}
+        />
+
+        <InputCheckbox
+          type='checkbox'
+          name='published'
+          labelText='Publicar?'
+          defaultChecked={publicPost?.published || false}
+        />
       </div>
       <div className='mt-6'>
         <Button variant={'default'} size='lg' className='w-full' type='submit'>
