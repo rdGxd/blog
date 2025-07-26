@@ -3,7 +3,7 @@ import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const jwtSecretKey = process.env.JWT_SECRET;
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const jwtEncodedKey = new TextEncoder().encode(jwtSecretKey);
 
 const loginExpSeconds = Number(process.env.LOGIN_EXPIRATION_SECONDS) || 86400; // 24 horas
