@@ -1,7 +1,8 @@
 'use server';
 
-import { verifyPassword } from '@/lib/login/manage-login';
+import { createLoginSession, verifyPassword } from '@/lib/login/manage-login';
 import { asyncDelay } from '@/utils/async-delay';
+import { redirect } from 'next/navigation';
 
 type LoginActionState = {
   username: string;
@@ -43,12 +44,6 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
     };
   }
 
-  // TODO: abaixo
-  // Aqui o usuário está logado com sucesso
-  // Criar cookie de sessão, JWT, etc.
-  // Redirecionar para a página de administração
-  return {
-    username: '',
-    error: 'Usuário logado com sucesso',
-  };
+  await createLoginSession(username);
+  redirect('/admin/post');
 }
