@@ -1,5 +1,6 @@
 'use server';
 
+import { verifyPassword } from '@/lib/login/manage-login';
 import { asyncDelay } from '@/utils/async-delay';
 
 type LoginActionState = {
@@ -18,22 +19,36 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
   }
 
   // Dados que o usuário enviou
-  const username = formData.get('username')?.toString() || '';
-  const password = formData.get('password')?.toString() || '';
+  const username = formData.get('username')?.toString().trim() || '';
+  const password = formData.get('password')?.toString().trim() || '';
 
-  // Checaria se o usuário existe na base de dados
-  const isUsernameValid = username === process.env.LOGIN_USER;
-  const isPasswordValid = password === process.env.LOGIN_PASSWORD;
-
-  if (isUsernameValid && isPasswordValid) {
+  if (!username || !password) {
     return {
-      username,
-      error: '',
+      username: username,
+      error: 'Usuário e senha são obrigatórios',
     };
   }
 
+  // Checaria se o usuário existe na base de dados
+  const isUsernameValid = username === process.env.LOGIN_USER;
+  const isPasswordValid = await verifyPassword(
+    password,
+    process.env.LOGIN_PASSWORD || '',
+  );
+
+  if (!isUsernameValid && !isPasswordValid) {
+    return {
+      username,
+      error: 'Usuário ou senha inválidos',
+    };
+  }
+
+  // TODO: abaixo
+  // Aqui o usuário está logado com sucesso
+  // Criar cookie de sessão, JWT, etc.
+  // Redirecionar para a página de administração
   return {
     username: '',
-    error: 'Usuário ou senha inválidos',
+    error: 'Usuário logado com sucesso',
   };
 }
