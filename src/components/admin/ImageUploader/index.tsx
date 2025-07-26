@@ -62,7 +62,7 @@ export function ImageUploader({ disabled = false }: ImageUploaderProps) {
         setImageUrl('');
         return;
       }
-      // TODO: Aqui você pode fazer algo com a URL retornada, como armazená-la no estado do componente pai ou enviar para o servidor.
+
       setImageUrl(result.url);
       toast.success(`Imagem enviada com sucesso`);
     });

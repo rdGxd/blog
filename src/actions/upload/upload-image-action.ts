@@ -67,6 +67,5 @@ export async function uploadImageAction(
 
   const url = `${imgServerURL}/${uniqueImageName}`;
 
-  // TODO: Aqui você deve implementar a lógica para enviar o arquivo para o servidor
   return makeResult({ url });
 }
