@@ -36,10 +36,37 @@ export async function createUserAction(
     };
   }
 
-  // If the data is valid, you can proceed with user creation
-  return {
-    user: state.user,
-    errors: [],
-    success: true,
-  };
+  // TODO: fetch API mover para uma função utilitária depois
+  const apiUrl = `${process.env.API_URL}` || 'http://localhost:3001';
+
+  try {
+    const response = await fetch(`${apiUrl}/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(parsedFormData.data),
+    });
+    const json = await response.json();
+    if (!response.ok) {
+      return {
+        user: PublicUserSchema.parse(formObj),
+        errors: json.message,
+        success: false,
+      };
+    }
+
+    return {
+      user: PublicUserSchema.parse(formObj),
+      errors: ['success'],
+      success: true,
+    };
+  } catch (error) {
+    console.error('Erro ao criar usuário:', error);
+    return {
+      user: PublicUserSchema.parse(formObj),
+      errors: ['Erro ao criar usuário. Tente novamente mais tarde.'],
+      success: false,
+    };
+  }
 }
