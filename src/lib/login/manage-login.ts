@@ -68,7 +68,7 @@ export async function getLoginSession() {
   return verifyJWT(jwt);
 }
 
-export async function getLoginSessionApi() {
+export async function getLoginSessionForApi() {
   const cookieStore = await cookies();
 
   const jwt = cookieStore.get(loginCookieName)?.value;
@@ -96,7 +96,7 @@ export async function requiredLoginSessionOrRedirect() {
 }
 
 export async function requiredLoginSessionForApiOrRedirect() {
-  const isAuthenticated = await getLoginSessionApi();
+  const isAuthenticated = await getLoginSessionForApi();
 
   if (!isAuthenticated) {
     redirect('/login');
