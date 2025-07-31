@@ -1,15 +1,25 @@
 import ErrorMessage from '@/components/ErrorMessage';
-import { findAllPostsAdmin } from '@/lib/post/queries/admin';
+import { findAllPostsFromApiAdmin } from '@/lib/post/queries/admin';
 import Link from 'next/link';
 import { DeletePostButtonAdmin } from '../DeletePostButton';
 
 export const PostListAdmin = async () => {
-  const posts = await findAllPostsAdmin();
+  const postsRes = await findAllPostsFromApiAdmin();
 
+  if (!postsRes.success) {
+    return (
+      <ErrorMessage
+        contentTitle='Ei 😅'
+        content='Tente fazer login novamente. Parece que houve um erro ao buscar os posts.'
+      />
+    );
+  }
+
+  const posts = postsRes.data;
   if (posts.length <= 0) {
     return (
       <ErrorMessage
-        contentTitle='Ei admin, cadê os posts? 😅'
+        contentTitle='Ei 😅'
         content='Parece que você ainda não tem posts publicados. Crie um novo post para começar! 😉'
       />
     );
