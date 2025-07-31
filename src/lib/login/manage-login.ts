@@ -39,6 +39,19 @@ export async function createLoginSession(username: string) {
   });
 }
 
+export async function createLoginSessionFromApi(jwt: string) {
+  const expiresAt = new Date(Date.now() + loginExpSeconds * 1000);
+  const loginSession = jwt;
+  const cookieStore = await cookies();
+
+  cookieStore.set(loginCookieName, loginSession, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    expires: expiresAt,
+  });
+}
+
 export async function deleteLoginSession() {
   const cookieStore = await cookies();
   cookieStore.set(loginCookieName, '', { expires: new Date(0) }); // Expira o cookie
@@ -55,6 +68,16 @@ export async function getLoginSession() {
   return verifyJWT(jwt);
 }
 
+export async function getLoginSessionApi() {
+  const cookieStore = await cookies();
+
+  const jwt = cookieStore.get(loginCookieName)?.value;
+
+  if (!jwt) return false;
+
+  return jwt;
+}
+
 // * SÓ SERVE PARA ESSE SISTEMA, NÃO É PARA SER USADO EM OUTROS LUGARES
 export async function verifyLoginSession() {
   const jwtPayload = await getLoginSession();
@@ -68,7 +91,15 @@ export async function requiredLoginSessionOrRedirect() {
   const isAuthenticated = await verifyLoginSession();
 
   if (!isAuthenticated) {
-    redirect('/admin/login');
+    redirect('/login');
+  }
+}
+
+export async function requiredLoginSessionForApiOrRedirect() {
+  const isAuthenticated = await getLoginSessionApi();
+
+  if (!isAuthenticated) {
+    redirect('/login');
   }
 }
 
