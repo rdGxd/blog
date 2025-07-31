@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteUserAction } from '@/actions/user/delete-user-acion';
 import { updateUserAction } from '@/actions/user/update-user-action';
 import { Button } from '@/components/Button';
 import { Dialog } from '@/components/Dialog';
@@ -38,7 +39,19 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     });
   }
 
-  function handleDeleteUserAccount() {}
+  function handleDeleteUserAccount() {
+    startTransition(async () => {
+      if (!confirm('Você tem certeza que deseja apagar sua conta?')) return;
+
+      const result = await deleteUserAction();
+
+      if (result.errors) {
+        toast.dismiss();
+        result.errors.forEach(error => toast.error(error));
+      }
+      setIsDialogVisible(false);
+    });
+  }
 
   useEffect(() => {
     toast.dismiss();
@@ -111,7 +124,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         }
         disabled={isElementsDisabled}
         isVisible={isDialogVisible}
-        onConfirm={() => setIsDialogVisible(false)}
+        onConfirm={handleDeleteUserAccount}
         onCancel={() => setIsDialogVisible(false)}
         title={'Apagar meu usuário'}
       />
