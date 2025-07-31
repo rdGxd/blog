@@ -1,9 +1,15 @@
-import { findAllPublicPostsCached } from '@/lib/post/queries/public';
+import { findAllPublicPostsFromApiCached } from '@/lib/post/queries/public';
 import { PostCoverImage } from '../PostCoverImage';
 import { PostSummary } from '../PostSummary';
 
 export default async function PostsLists() {
-  const posts = await findAllPublicPostsCached();
+  const postsRes = await findAllPublicPostsFromApiCached();
+
+  if (!postsRes.success) {
+    return null;
+  }
+
+  const posts = postsRes.data;
 
   if (posts.length <= 0) return null;
 

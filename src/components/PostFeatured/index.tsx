@@ -1,21 +1,29 @@
-import { findAllPublicPostsCached } from '@/lib/post/queries/public';
+import { findAllPublicPostsFromApiCached } from '@/lib/post/queries/public';
 import ErrorMessage from '../ErrorMessage';
 import { PostCoverImage } from '../PostCoverImage';
 import { PostSummary } from '../PostSummary';
 
 export async function PostFeatured() {
-  const posts = await findAllPublicPostsCached();
+  const postsRes = await findAllPublicPostsFromApiCached();
+  const noPostsFound = (
+    <ErrorMessage
+      contentTitle='Ops 😅'
+      content='Nenhum post encontrado. Que tal criar um? 😉'
+    />
+  );
+
+  if (!postsRes.success) {
+    return noPostsFound;
+  }
+
+  const posts = postsRes.data;
 
   if (posts.length <= 0) {
-    return (
-      <ErrorMessage
-        contentTitle='Ops 😅'
-        content='Nenhum post encontrado. Que tal criar um? 😉'
-      />
-    );
+    return noPostsFound;
   }
 
   const post = posts[0];
+  console.log(postsRes);
 
   return (
     <div className='group mb-5 flex flex-col gap-4'>
