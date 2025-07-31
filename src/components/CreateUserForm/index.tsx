@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useActionState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '../Button';
+import { HoneypotInput } from '../HoneypotInput';
 import { InputText } from '../InputText';
 
 export function CreateUserForm() {
@@ -61,6 +62,9 @@ export function CreateUserForm() {
           defaultValue={''}
           required
         />
+
+        <HoneypotInput />
+
         <Button disabled={isPending} type='submit' className='mt-4'>
           <UserRoundIcon />
           {!isPending ? 'Criar Usuário' : 'Carregando...'}

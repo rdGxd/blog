@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { HoneypotInput } from '../HoneypotInput';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,6 +72,8 @@ export default function AdminLoginPage() {
           disabled={isPending}
           required
         />
+
+        <HoneypotInput />
 
         <Button type='submit' className='mt-4' disabled={isPending}>
           <LogInIcon />
