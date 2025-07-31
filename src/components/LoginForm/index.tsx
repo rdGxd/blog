@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { InputText } from '@/components/InputText';
 import { LogInIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
@@ -17,6 +18,10 @@ export default function AdminLoginPage() {
   };
 
   const [state, action, isPending] = useActionState(loginAction, initialState);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const userChanged = searchParams.get('userChanged');
+  const created = searchParams.get('created');
 
   useEffect(() => {
     if (state.errors.length > 0) {
@@ -24,6 +29,24 @@ export default function AdminLoginPage() {
       state.errors.forEach(error => toast.error(error));
     }
   }, [state]);
+
+  useEffect(() => {
+    if (userChanged === '1') {
+      toast.dismiss();
+      toast.success('Usuário alterado com sucesso!, faça login novamente.');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('userChanged');
+      router.replace(url.toString());
+    }
+
+    if (created === '1') {
+      toast.dismiss();
+      toast.success('Usuário criado com sucesso! Faça login.');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('created');
+      router.replace(url.toString());
+    }
+  }, [userChanged, router, created]);
 
   return (
     <div className='mx-auto mt-16 mb-32 flex max-w-sm items-center justify-center text-center'>
