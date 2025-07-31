@@ -60,7 +60,7 @@ export const UpdatePostForApiSchema = PostBaseSchema.omit({
 }).extend({});
 
 export const PublicPostForApiSchema = PostBaseSchema.extend({
-  id: z.uuid().default(''),
+  id: z.string().default(''),
   slug: z.string().default(''),
   title: z.string().default(''),
   excerpt: z.string().default(''),

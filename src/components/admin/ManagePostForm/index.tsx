@@ -6,19 +6,22 @@ import { Button } from '@/components/Button';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkdownEditor';
-import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
+import {
+  PublicPostForApiDto,
+  PublicPostForApiSchema,
+} from '@/lib/post/schemas';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ImageUploader } from '../ImageUploader';
 
 type ManagePostFormUpdateProps = {
-  publicPost: PublicPost;
+  publicPost: PublicPostForApiDto;
   mode: 'update';
 };
 
 type ManagePostFormCreateProps = {
-  publicPost?: PublicPost;
+  publicPost?: PublicPostForApiDto;
   mode: 'create';
 };
 type ManagePostFormProps =
@@ -43,7 +46,7 @@ export function ManagePostForm(props: ManagePostFormProps) {
   }[mode];
 
   const initialState = {
-    formState: makePartialPublicPost(publicPost),
+    formState: PublicPostForApiSchema.parse(publicPost || {}),
     errors: [],
   };
 
@@ -102,15 +105,6 @@ export function ManagePostForm(props: ManagePostFormProps) {
         />
 
         <InputText
-          labelText='Autor'
-          name='author'
-          placeholder='Digite o nome do autor'
-          type='text'
-          disabled={isPending}
-          defaultValue={formState.author}
-        />
-
-        <InputText
           placeholder='Digite o título do post'
           labelText='Título'
           name='title'
@@ -147,13 +141,15 @@ export function ManagePostForm(props: ManagePostFormProps) {
           defaultValue={formState.coverImageUrl}
         />
 
-        <InputCheckbox
-          disabled={isPending}
-          type='checkbox'
-          name='published'
-          labelText='Publicar?'
-          defaultChecked={formState.published}
-        />
+        {mode === 'update' && (
+          <InputCheckbox
+            disabled={isPending}
+            type='checkbox'
+            name='published'
+            labelText='Publicar?'
+            defaultChecked={formState.published}
+          />
+        )}
       </div>
       <div className='mt-6'>
         <Button variant={'default'} type='submit' disabled={isPending}>
