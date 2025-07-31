@@ -9,6 +9,7 @@ import {
   LogOutIcon,
   MenuIcon,
   PlusIcon,
+  UserPenIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -44,13 +45,12 @@ export function MenuAdmin() {
         onClick={() => setIsOpen(s => !s)}
         className={openCloseBtnClasses}
       >
-        {!isOpen && (
+        {!isOpen ? (
           <>
             <MenuIcon />
             Menu
           </>
-        )}
-        {isOpen && (
+        ) : (
           <>
             <CircleXIcon />
             Fechar
@@ -65,20 +65,22 @@ export function MenuAdmin() {
         <FileTextIcon />
         Posts
       </Link>
+      <Link href='/admin/user' className={linkClasses}>
+        <UserPenIcon />
+        Seus dados
+      </Link>
       <Link href='/admin/post/new' className={linkClasses}>
         <PlusIcon />
         Criar post
       </Link>
 
       <a href='' className={linkClasses} onClick={handleLogout}>
-        {isPending && (
+        {isPending ? (
           <>
             <HourglassIcon />
             Aguarde...
           </>
-        )}
-
-        {!isPending && (
+        ) : (
           <>
             <LogOutIcon />
             Sair

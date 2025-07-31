@@ -23,7 +23,6 @@ export async function PostFeatured() {
   }
 
   const post = posts[0];
-  console.log(postsRes);
 
   return (
     <div className='group mb-5 flex flex-col gap-4'>
