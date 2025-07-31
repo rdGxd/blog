@@ -92,22 +92,22 @@ Se rodou tudo bonitinho, vamos para o Nginx
 sudo apt install nginx -y  # Só isso já deve subir algo na porta 80
 ```
 
-Configurando para por 80 - (Meu domínio: theblog.rdg.com.br)
+Configurando para por 80 - (Meu domínio: theblog.otaviomiranda.com.br)
 
 ```sh
-sudo nano /etc/nginx/sites-available/theblog.rdg.com.br
+sudo nano /etc/nginx/sites-available/theblog.otaviomiranda.com.br
 ```
 
 Edita os dados abaixo:\
-`theblog.rdg.com.br`\
+`theblog.otaviomiranda.com.br`\
 Se você mudou a porta da aplicação, mude `3000` para o número que escolheu.
-Também ajuste os caminhos `/home/rdg/theblog/public/` e
-`/home/rdg/theblog/public/uploads/`
+Também ajuste os caminhos `/home/luizotavio/theblog/public/` e
+`/home/luizotavio/theblog/public/uploads/`
 
 ```
 server {
   listen 80;
-  server_name theblog.rdg.com.br;
+  server_name theblog.otaviomiranda.com.br;
 
   # Desativa buffer pra suportar Streaming e Suspense do Next.js
   proxy_buffering off;
@@ -115,12 +115,12 @@ server {
 
   # Servir arquivos estáticos do /public
   location /public/ {
-    alias /home/rdg/theblog/public/;
+    alias /home/luizotavio/theblog/public/;
   }
 
   # Servir arquivos estáticos do /public
   location /uploads/ {
-    alias /home/rdg/theblog/public/uploads/;
+    alias /home/luizotavio/theblog/public/uploads/;
   }
 
   # Resto do tráfego passa pro app Node (Next.js)
@@ -154,7 +154,7 @@ pasta sites-enabled (é ela que ativa os sites):
 
 ```sh
 sudo rm /etc/nginx/sites-enabled/default # Apaga o site default que o nginx ativou
-sudo ln -s /etc/nginx/sites-available/theblog.rdg.com.br /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/theblog.otaviomiranda.com.br /etc/nginx/sites-enabled/
 sudo nginx -t # confere se está tudo certo
 sudo systemctl reload nginx
 ```
@@ -164,7 +164,7 @@ tem domínio)
 
 ```sh
 sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d theblog.rdg.com.br
+sudo certbot --nginx -d theblog.otaviomiranda.com.br
 sudo nginx -t # confere se tá tudo certo
 sudo systemctl reload nginx
 ```
@@ -176,11 +176,11 @@ para seu nome de usuário:
 
 ```sh
 sudo chmod o+x /home # primeiro na home (até chegar em uploads)
-sudo chmod o+x /home/rdg
-sudo chmod o+x /home/rdg/theblog
-sudo chmod o+x /home/rdg/theblog/public
+sudo chmod o+x /home/luizotavio
+sudo chmod o+x /home/luizotavio/theblog
+sudo chmod o+x /home/luizotavio/theblog/public
 # só aqui fiz recursão para evitar mudar todos os arquivos do projeto
-sudo chmod -R o+rx /home/rdg/theblog/public/uploads
+sudo chmod -R o+rx /home/luizotavio/theblog/public/uploads
 ```
 
 Agora vamos usar o pm2 para manter o app sempre aberto e iniciando junto com o
@@ -203,8 +203,28 @@ pm2 log theblog # veja o log do next (importante para debug)
 # O sqlite não lida muito bem cluster (várias instâncias do node rodando ao mesmo tempo)
 # mas se você trocar de base de dados, para postgreSQL, MySQL, etc, use os comandos abaixo:
 pm2 delete theblog # reinicia
+pm2 save --force
+pm2 unstartup
+pm2 save --force
 pm2 start npm --name theblog -- start -i max # modo cluster, 1 instância por core do processador
 pm2 save
+```
+
+### SSH Config
+
+```sh
+# Comando para gerar a chave
+ssh-keygen -t ed25519 -f ~/.ssh/github_novo
+
+nano ~/.ssh/config
+
+# Cole o trecho abaixo
+
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/github_novo
+  IdentitiesOnly yes
 ```
 
 Depoois de fazer todas as configurações, meu arquivo final do NGINX ficou assim:
@@ -215,10 +235,10 @@ Depoois de fazer todas as configurações, meu arquivo final do NGINX ficou assi
 #############################################
 
 server {
-  server_name theblog.rdg.com.br;
+  server_name theblog.otaviomiranda.com.br;
 
   # (opcional) Define o caminho raiz do projeto – Next.js não usa diretamente, mas não atrapalha
-  root /home/rdg/theblog;
+  root /home/luizotavio/theblog;
 
   # Desativa buffer de proxy – necessário para funcionar corretamente o Streaming e Suspense no Next.js
   proxy_buffering off;
@@ -290,12 +310,12 @@ server {
 
   # Arquivos públicos acessíveis diretamente, como imagens
   location /public/ {
-    alias /home/rdg/theblog/public/;
+    alias /home/luizotavio/theblog/public/;
   }
 
   # Pasta de uploads – acessível diretamente. IMPORTANTE: qualquer rota "/uploads" do Next será ignorada
   location /uploads/ {
-    alias /home/rdg/theblog/public/uploads/;
+    alias /home/luizotavio/theblog/public/uploads/;
   }
 
   # Todas as outras rotas passam para o servidor Next.js (SSR)
@@ -314,8 +334,8 @@ server {
 
   # --- HTTPS (SSL) ---
   listen 443 ssl; # managed by Certbot
-  ssl_certificate /etc/letsencrypt/live/theblog.rdg.com.br/fullchain.pem; # managed by Certbot
-  ssl_certificate_key /etc/letsencrypt/live/theblog.rdg.com.br/privkey.pem; # managed by Certbot
+  ssl_certificate /etc/letsencrypt/live/theblog.otaviomiranda.com.br/fullchain.pem; # managed by Certbot
+  ssl_certificate_key /etc/letsencrypt/live/theblog.otaviomiranda.com.br/privkey.pem; # managed by Certbot
   include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
   ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
@@ -326,12 +346,12 @@ server {
 
 server {
   # Redireciona todo tráfego HTTP para HTTPS
-  if ($host = theblog.rdg.com.br) {
+  if ($host = theblog.otaviomiranda.com.br) {
     return 301 https://$host$request_uri;
   } # managed by Certbot
 
   listen 80;
-  server_name theblog.rdg.com.br;
+  server_name theblog.otaviomiranda.com.br;
   return 404; # fallback se algo passar sem redirecionar
 }
 ```
@@ -351,8 +371,8 @@ Cola isso no arquivo ajustando os caminhos para seu servidor
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-echo "cd /home/rdg/theblog"
-cd /home/rdg/theblog
+echo "cd /home/luizotavio/theblog"
+cd /home/luizotavio/theblog
 echo
 
 echo "Executando: git pull origin main"
@@ -382,7 +402,7 @@ Agora, do seu computador você pode executar o seguinte comando mudando os dados
 para o seu servidor (usuário, domínio ou ip, nome do arquivo):
 
 ```sh
-ssh rdg@theblog.rdg.com.br './refresh-theblog.sh'
+ssh luizotavio@theblog.otaviomiranda.com.br './refresh-theblog.sh'
 ```
 
 Esse comando entra na pasta do projeto, executa "git pull" para puxar as
