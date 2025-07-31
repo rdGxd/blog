@@ -12,16 +12,16 @@ export const dynamic = 'force-dynamic';
 
 export default function AdminLoginPage() {
   const initialState = {
-    username: '',
-    error: '',
+    email: '',
+    errors: [],
   };
 
   const [state, action, isPending] = useActionState(loginAction, initialState);
 
   useEffect(() => {
-    if (state.error) {
+    if (state.errors.length > 0) {
       toast.dismiss();
-      toast.error(state.error);
+      state.errors.forEach(error => toast.error(error));
     }
   }, [state]);
 
@@ -29,13 +29,14 @@ export default function AdminLoginPage() {
     <div className='mx-auto mt-16 mb-32 flex max-w-sm items-center justify-center text-center'>
       <form className='flex flex-1 flex-col gap-6' action={action}>
         <InputText
-          type='text'
-          name='username'
-          placeholder='Seu usuário'
-          autoComplete='username'
-          labelText='Usuário'
+          type='email'
+          name='email'
+          placeholder='Email do usuário'
+          autoComplete='email'
+          labelText='Email'
           disabled={isPending}
-          defaultValue={state.username}
+          defaultValue={state.email}
+          required
         />
 
         <InputText
@@ -45,6 +46,7 @@ export default function AdminLoginPage() {
           autoComplete='current-password'
           labelText='Senha'
           disabled={isPending}
+          required
         />
 
         <Button type='submit' className='mt-4' disabled={isPending}>
@@ -55,8 +57,6 @@ export default function AdminLoginPage() {
         <p className='text-sm/tight'>
           <Link href='/user/new'>Criar uma conta</Link>
         </p>
-
-        {state.error && <p className='text-red-600'>{state.error}</p>}
       </form>
     </div>
   );
