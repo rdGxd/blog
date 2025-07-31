@@ -1,8 +1,7 @@
 'use server';
 
-import { verifyLoginSession } from '@/lib/login/manage-login';
-import { mkdir, writeFile } from 'fs/promises';
-import { extname, resolve } from 'path';
+import { getLoginSessionForApi } from '@/lib/login/manage-login';
+import { authenticatedApiRequest } from '@/utils/authenticated-api-request';
 
 type UploadImageActionResult = {
   url: string;
@@ -12,16 +11,11 @@ type UploadImageActionResult = {
 const uploadMaxSize =
   Number(process.env.NEXT_PUBLIC_IMAGE_UPLOAD_MAX_SIZE) || 1048576;
 
-const uploadDir = process.env.IMAGE_UPLOAD_DIRECTORY || 'uploads';
-
-const imgServerURL =
-  process.env.IMAGE_SERVER_URL || 'http://localhost:3000/uploads';
-
 export async function uploadImageAction(
   formData: FormData,
 ): Promise<UploadImageActionResult> {
   const makeResult = ({ url = '', error = '' }) => ({ url, error });
-  const isAuthenticated = await verifyLoginSession();
+  const isAuthenticated = await getLoginSessionForApi();
 
   if (!isAuthenticated) {
     return makeResult({
@@ -51,21 +45,17 @@ export async function uploadImageAction(
     });
   }
 
-  const imageExtension = extname(file.name).toLowerCase();
-  const uniqueImageName = `${Date.now()}${imageExtension}`;
+  const uploadResponse = await authenticatedApiRequest<{ url: string }>(
+    `/upload`,
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
 
-  const uploadFullPath = resolve(process.cwd(), 'public', uploadDir);
-
-  await mkdir(uploadFullPath, { recursive: true });
-
-  const fileArrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(fileArrayBuffer);
-
-  const fileFullPath = resolve(uploadFullPath, uniqueImageName);
-
-  await writeFile(fileFullPath, buffer);
-
-  const url = `${imgServerURL}/${uniqueImageName}`;
-
+  if (!uploadResponse.success) {
+    return makeResult({ error: uploadResponse.errors[0] });
+  }
+  const url = `${process.env.IMAGE_SERVER_URL}${uploadResponse.data.url}`;
   return makeResult({ url });
 }
