@@ -88,22 +88,25 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         />
 
         <HoneypotInput />
-        <Link
-          href={'/admin/user/password'}
-          className='flex items-center justify-center gap-2'
-        >
-          <LockKeyhole />
-          Alterar Senha
-        </Link>
 
-        <Link
-          href={'/admin/user/delete'}
-          className='flex items-center justify-center gap-2 text-red-600 transition hover:text-red-700'
-          onClick={showDeleteAccountDialog}
-        >
-          <OctagonXIcon />
-          Apagar a conta
-        </Link>
+        <div className='mt-8 flex items-center justify-between gap-4'>
+          <Link
+            href={'/admin/user/password'}
+            className='flex items-center justify-center gap-2'
+          >
+            <LockKeyhole />
+            Alterar Senha
+          </Link>
+
+          <Link
+            href={'/admin/user/delete'}
+            className='flex items-center justify-center gap-2 text-red-600 transition hover:text-red-700'
+            onClick={showDeleteAccountDialog}
+          >
+            <OctagonXIcon />
+            Apagar a conta
+          </Link>
+        </div>
 
         <Button disabled={isElementsDisabled} type='submit' className='mt-4'>
           <UserRoundIcon />
